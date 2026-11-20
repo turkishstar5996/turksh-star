@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b0d14"><meta name="description" content="Turkish Mafia resmi Android oyun indirme sayfası. Çıkış: 12 Aralık 2026.">
+<title>Turkish Mafia | 12 Aralık 2026</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% 0%,#612228 0,#171824 42%,#090b10 100%);color:#f8fafc;display:flex;align-items:center;justify-content:center;padding:24px}.wrap{width:min(100%,720px);text-align:center}.mark{font-size:13px;letter-spacing:.35em;color:#fda4af}.hero{padding:50px 24px 35px;border:1px solid #ffffff24;border-radius:24px;background:#10121dcf;box-shadow:0 30px 100px #0008}h1{font-size:clamp(40px,9vw,84px);line-height:.98;margin:22px 0 18px;letter-spacing:-.055em;text-transform:uppercase}.subtitle{color:#bcc2d1;line-height:1.55}.tags{display:flex;gap:10px;justify-content:center;margin:24px 0 30px;flex-wrap:wrap}.tag{border:1px solid #ffffff2a;padding:7px 14px;border-radius:30px;font-size:12px;letter-spacing:.09em}.date{font-size:clamp(24px,5vw,38px);font-weight:800;margin:16px 0 7px}.timer{font-variant-numeric:tabular-nums;letter-spacing:.06em;margin:18px 0;color:#fca5a5;font-weight:700;font-size:23px}button,a.download{display:block;text-decoration:none;color:white;font-weight:800;background:linear-gradient(110deg,#da344b,#8d1d32);border:0;padding:17px 20px;border-radius:14px;cursor:pointer;width:min(100%,360px);margin:0 auto;font-size:16px}button:disabled{cursor:not-allowed;background:#3b3e48;color:#d8d9df}.note{font-size:13px;color:#aeb3c2;margin-top:18px}.footer{margin-top:25px;font-size:12px;color:#9699a6}#ready{display:none}#waiting{display:block}</style>
+</head>
+<body><main class="wrap"><section class="hero">
+<div class="mark">YENİ ANDROID OYUNU</div><h1>TURKISH<br>MAFIA</h1>
+<p class="subtitle">Şehir senin. Hikâye senin.<br>Resmî oyun indirme sayfası</p>
+<div class="tags"><span class="tag">ANDROID</span><span class="tag">ÜCRETSİZ İNDİRME</span><span class="tag">APK</span></div>
+<div id="waiting"><div class="date">12 ARALIK 2026</div><div class="subtitle">Türkiye saatiyle 00.00'da çıkış</div><div class="timer" id="countdown">Geri sayım hazırlanıyor…</div><button disabled>🔒 İNDİRME HENÜZ AÇILMADI</button></div>
+<div id="ready"><div class="date">OYUN YAYINDA!</div><p class="subtitle">APK dosyasını resmî GitHub sürümünden indirebilirsin.</p><a class="download" id="download" href="#" rel="noopener noreferrer">⬇ APK İNDİR</a></div>
+<p class="note" id="status">Oyun çıkış günü indirmeye açılacaktır.</p>
+</section><div class="footer">© 2026 Turkish Mafia • Sadece resmî APK dosyasını indir.</div></main>
+<script>
+const releaseAt=Date.parse('2026-12-11T21:00:00Z'); // 12 Aralık 2026, Türkiye 00.00
+const tag='v1.0.0';
+const parts=location.pathname.split('/').filter(Boolean);
+const owner=location.hostname.endsWith('.github.io')?location.hostname.split('.')[0]:null;
+const repo=parts[0]||null;
+let lastChecked=0;
+let released=false;
+function countdown(){const d=Math.max(0,releaseAt-Date.now());const days=Math.floor(d/86400000),hours=Math.floor(d%86400000/3600000),mins=Math.floor(d%3600000/60000),secs=Math.floor(d%60000/1000);return `${days} gün ${String(hours).padStart(2,'0')} saat ${String(mins).padStart(2,'0')} dk ${String(secs).padStart(2,'0')} sn`;}
+async function checkRelease(){if(released||Date.now()<releaseAt||!owner||!repo)return;try{const res=await fetch(`https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/releases/tags/${encodeURIComponent(tag)}`,{cache:'no-store'});if(!res.ok)return;const data=await res.json();if(data.draft||!data.assets)return;const apk=data.assets.find(x=>x.name.toLowerCase().endsWith('.apk'));if(!apk)return;released=true;document.getElementById('download').href=apk.browser_download_url;document.getElementById('ready').style.display='block';document.getElementById('waiting').style.display='none';document.getElementById('status').textContent='Güvenliğiniz için yalnızca yayıncının paylaştığı resmî dosyayı indirin.';}catch(e){/* sonraki kontrolde yeniden dene */}}
+function tick(){const now=Date.now();if(now<releaseAt){document.getElementById('countdown').textContent=countdown();}else if(!released){document.getElementById('countdown').textContent='Çıkış saati geldi, yayın onayı bekleniyor';document.getElementById('status').textContent='GitHub yayını kontrol ediliyor. Biraz sonra sayfayı yeniden açabilirsin.';}if(now-lastChecked>60000){lastChecked=now;checkRelease();}}
+tick();setInterval(tick,1000);
+</script>
+</body></html>
